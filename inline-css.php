@@ -28,11 +28,11 @@ class InlineCss {
 		}
 	}
 
-	public function inlineStyle($url) {
+	public function inlineCSS($url) {
 		echo $this->printStyle($url);
 	}
 	
-	public function linkStyle($url) {
+	public function linkCSS($url) {
 		echo $this->linkStyle($url);
 	}
     	
