@@ -1,40 +1,60 @@
 <?php
 
 class InlineCss {
+    	
+    	// Styles set to load in the <head> section of the page
+	private $aboveFoldStyles;
+	
+	// Styles set to load after initial page load is finished
+	private $belowFoldStyles;
     
-    private $criticalStyles;
-    private $deferredStyles;
-    
-    public function __construct($styles) {
-        
-        if (isset($styles['critical'])) {
-            
-            $this->criticalStyles = $styles['critical'];
-            
-        } else {
-            
-            $this->criticalStyles = NULL;
-            
-        }
-        
-        if (isset($styles['deferred'])) {
-            
-            $this->deferredStyles = $styles['deferred'];
-            
-        } else {
-            
-            $this->deferredStyles = NULL;
-            
-        }
-        
-    }
-    
-    private function printStyles() {}
-    
-    private function linkStyles() {}
-    
-    
-    
+	public function __construct($styles) {
+		
+		$this->aboveFoldStyles = isset($styles['aboveFold']) ? $styles['aboveFold'] : false;
+		$this->belowFoldStyles = isset($styles['belowFold']) ? $styles['belowFold'] : false;
+	}
+	
+	public function aboveFoldStyles() {
+		
+		foreach ($this->aboveFoldStyles as $style) {
+			echo $this->printStyle($style);
+		}
+	}
+	
+	public function belowFoldStyles() {
+		
+		foreach ($this->belowFoldStyles as $style) {
+			echo $this->linkStyle($style);
+		}
+	}
+
+	public function inlineStyle($url) {
+		echo $this->printStyle($url);
+	}
+	
+	public function linkStyle($url) {
+		echo $this->linkStyle($url);
+	}
+    	
+    	private function printStyle($style) {
+		
+		$htmlStyleTag = '<style type="text/css">{style}</style>';
+		$styleContent = $this->readStyle($style);
+		
+		if (!$styleContent) {
+			return;
+		} else {
+			return str_replace('{style}', $styleContent, $htmlStyleTag);
+		}
+	}
+
+	private function linkStyle($url) {
+		return '<link rel="text/css" href="'.$url.'">';
+	}
+
+	private function readStyle($path) {
+		return file_exists($path) ? file_get_contents($path) : false;
+	}
 }
 
 ?>
